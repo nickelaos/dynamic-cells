@@ -1,0 +1,10 @@
+@import './cell.css';
+
+#app {
+    margin: 0;
+    padding: 0;
+    width: 40000px;
+    height: 40000px;
+    overflow: scroll;
+}
+
