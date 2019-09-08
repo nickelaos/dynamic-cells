@@ -1,20 +1,20 @@
 <template>
     <div id="main">
         <div id="cells-wrap">
-            <Cell v-for="(cell, index) in cells"
-                  :key="index+1"
-                  :id="index+1"
+            <Cell v-for="cell in cells"
+                  :key="cell.id"
                   :cell="cell"
             />
         </div>
         <div class="clearfix"></div>
-        <Trigger @triggerIntersected="debouncedLoadMore" />
+        <Trigger @triggerIntersected="loadMoreDebounced" />
         <img src="../assets/img/spinner-circle.gif" alt="spinner" class="spinner" v-show="loading">
     </div>
 </template>
 
 <script>
     import _ from 'lodash'
+    import { mapState, mapMutations } from 'vuex'
     import Cell from './Cell'
     import Trigger from './Trigger'
 
@@ -26,55 +26,51 @@
         },
         props: {},
         data(){
-            return {
-                cells: new Array(200),
-                cellsInRow: 100,
-                maxRows: 100,
-                cellHeight: 398,
-                loading: false,
-            }
+            return {}
         },
-        computed: {
-            /*loading(){
-                return false; // return this.$store.state.loading;
-            }*/
-        },
+        computed: mapState([
+            'cells',
+            'cellsInRow',
+            'maxRows',
+            'cellHeight',
+            'loading'
+        ]),
         methods: {
             calculateRows(){
                 let pageYOffset = window.pageYOffset;
-                if(pageYOffset === 0){
+                if(pageYOffset < 100){
                     return 2;
                 }
-                //console.log('ROWS: '+Math.ceil(pageYOffset / this.cellHeight));
                 return Math.ceil(pageYOffset / this.cellHeight + 1);
             },
             loadMore(){
-                //this.loading = true;
                 let rows = this.calculateRows();
                 if(rows > this.maxRows) return;
                 let count = this.cellsInRow * rows;
-                this.cells = new Array(count); // dispatch action
-                //this.loading = false;
+                this.loadCells({count: count});
             },
+            ...mapMutations([
+                'loadCells',
+                'enableLoading',
+                'disableLoading'
+            ]),
         },
         created() {
-            this.debouncedLoadMore = _.debounce(this.loadMore, 500);
+            this.loadCells({count: 200});
+            this.loadMoreDebounced = _.debounce(this.loadMore, 500);
+            this.disableLoadingDebounced = _.debounce(this.disableLoading, 500);
         },
         updated(){
-            //this.loading = false;
+            this.disableLoadingDebounced();
         },
         mounted(){
             window.scrollTo(0, 0);
             document.addEventListener('scroll', () => {
                 let pageYOffset = window.pageYOffset;
                 let rows = this.cells.length / this.cellsInRow;
-                /*console.log(rows);
-                console.log(pageYOffset);
-                console.log(pageYOffset / rows);
-                console.log('-------------------');*/
                 if(pageYOffset / rows > this.cellHeight){
-                    //this.loading = true;
-                    this.debouncedLoadMore();
+                    this.enableLoading();
+                    this.loadMore();
                 }
             })
         }

@@ -1,10 +1,10 @@
 <template>
     <div class="cell">
-        <h3 class="cell-title">Cell #{{id}}</h3>
+        <h3 class="cell-title">Cell #{{localData.id}}</h3>
         <form @submit.prevent="save">
-            <input type="number" class="input-field" v-model="cell.number" :disabled="cell.disabled">
+            <input type="number" class="input-field" v-model="localData.number" :disabled="localData.disabled">
             <label>
-                <input type="checkbox" class="input-checkbox" v-model="cell.disabled">Disable input field
+                <input type="checkbox" class="input-checkbox" v-model="localData.disabled">Disable input field
             </label>
             <button type="submit" class="submit-button" v-show="showButton">SAVE</button>
         </form>
@@ -16,14 +16,11 @@
     export default {
         name: 'Cell',
         props: {
-            id: {
-                type: Number,
-                default: 0
-            },
             cell: {
                 type: Object,
                 default: function(){
                     return {
+                        id: null,
                         number: null,
                         disabled: false
                     }
@@ -32,24 +29,30 @@
         },
         data(){
             return {
-                /*cell: {
+                localData: {
+                    id: null,
                     number: null,
                     disabled: false
-                }*/
+                }
             }
         },
         computed: {
             showButton(){
-                return this.cell.number && !this.cell.disabled;
+                return this.localData.number && !this.localData.disabled;
             }
         },
         methods: {
             save(){
-                console.log(this.cell);
-            }
+                this.$store.commit('updateCell', this.localData);
+            },
+            initLocalState(){
+                this.localData.id = this.cell.id;
+                this.localData.number = this.cell.number;
+                this.localData.disabled = this.cell.disabled;
+            },
         },
         created() {
-
+            this.initLocalState();
         }
     }
 </script>

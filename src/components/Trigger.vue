@@ -25,6 +25,7 @@
         methods: {
             handleIntersect(entry){
                 if(entry.isIntersecting){
+                    this.$store.commit('enableLoading');
                     this.$emit("triggerIntersected");
                 }
             }
