@@ -19,14 +19,23 @@
             id: {
                 type: Number,
                 default: 0
+            },
+            cell: {
+                type: Object,
+                default: function(){
+                    return {
+                        number: null,
+                        disabled: false
+                    }
+                }
             }
         },
         data(){
             return {
-                cell: {
+                /*cell: {
                     number: null,
                     disabled: false
-                }
+                }*/
             }
         },
         computed: {
