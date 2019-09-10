@@ -74,7 +74,7 @@
                 // If the number exceeds the MAX limit - return
                 if(rows > this.maxRows) return;
 
-                // Define how many cells to load
+                // Calculate how many cells to load
                 let count = this.cellsInRow * rows;
 
                 // Load more cells
