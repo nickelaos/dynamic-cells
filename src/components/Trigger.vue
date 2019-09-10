@@ -49,6 +49,7 @@
              * A callback for IntersectionObserver().
              * Fires when the observed element passes the specified threshold.
              * @param {Array} entry - array of all elements that are watched by the observer
+             * @fires triggerIntersected
              * */
             handleIntersect(entry){
 

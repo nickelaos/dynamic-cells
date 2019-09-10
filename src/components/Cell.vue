@@ -45,7 +45,7 @@
         },
         computed: {
             /**
-             * Show `SAVE` button if the number is entered and the input field is not disabled.
+             * Shows `SAVE` button if the number is entered and the input field is not disabled.
              * @returns {boolean}
              * */
             showButton(){
@@ -54,13 +54,13 @@
         },
         methods: {
             /**
-             * Save changes calling `updateCell` mutation.
+             * Saves changes calling `updateCell` mutation.
              * */
             save(){
                 this.$store.commit('updateCell', this.localData);
             },
             /**
-             * Copy prop data to local state.
+             * Copies prop data to local state.
              * */
             initLocalState(){
                 this.localData.id = this.cell.id;
